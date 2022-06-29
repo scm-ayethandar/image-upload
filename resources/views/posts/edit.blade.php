@@ -43,26 +43,34 @@
 <body>
 
     <div class="container">
-        <form method="post" action="/posts/store" enctype="multipart/form-data">
+        <form method="post" action="" enctype="multipart/form-data">
             @csrf
 
             <div class="image">
                 <label>
-                    <h4>Post name</h4>
+                    <h4>Name</h4>
                 </label>
-                <input type="text" class="form-control" required name="name">
+                <input type="text" class="form-control" required name="name" value="{{ $post->name }}">
             </div>
 
+            @if($post->images->count())
             <div class="image field">
-                <label>
-                    <h4>Add image</h4>
-                </label>
-                <!-- <input type="file" class="form-control" required name="image" > -->
-                <input type="file" name="files[]" id="files" multiple="multiple" required>
+                @foreach($post->images as $image)
+                    <div class="pip position-relative me-3">
+                        <img class="imageThumb" src="{{ url($image->path.'/'.$image->name) }}" >
+                        <form action="/post-image/{{$image->id}}/delete" method="POST">
+                            @method('DELETE')
+                            @csrf
+                            <button type="submit" class="remove position-absolute top-0 start-100 translate-middle
+                              badge bg-danger">X</button>
+                        </form>
+                    </div>
+                @endforeach
             </div>
-                <div class="post_button">
-                    <button type="submit" class="btn btn-success">Add</button>
-                </div>
+            @endif
+            <div class="post_button">
+                <button type="submit" class="btn btn-success">Update</button>
+            </div>
         </form>
     </div>
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
@@ -93,6 +101,9 @@
             } else {
                 alert("Your browser doesn't support to File API")
             }
+            $(".remove").click(function() {
+                    $(this).parent(".pip").remove();
+            });
         });
     </script>
 

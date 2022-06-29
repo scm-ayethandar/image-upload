@@ -10,11 +10,11 @@
 </head>
 <style>
     input[type="file"] {
-        display: block;
+        display: none;
     }
 
     .imageThumb {
-        max-height: 75px;
+        max-height: 80px;
         border: 2px solid;
         padding: 1px;
         cursor: pointer;
@@ -54,12 +54,16 @@
             </div>
 
             <div class="image field">
-                <label>
-                    <h4>Add image</h4>
-                </label>
-                <!-- <input type="file" class="form-control" required name="image" > -->
-                <input type="file" name="files[]" id="files" multiple="multiple" required>
-            </div>
+                <div>
+                    <label  id="image">
+                        <!-- <div class="d-flex"> -->
+                            <div class="img-file">
+                                <input type="file" name="files[]" id="files" multiple="multiple" required>
+                            </div>
+                            <img src="\add_image.png" id="add" style="width: 100px; height: 100px;" alt="">
+                        <!-- </div> -->
+                    </label>
+                </div>
                 <div class="post_button">
                     <button type="submit" class="btn btn-success">Add</button>
                 </div>
@@ -77,11 +81,12 @@
                         var fileReader = new FileReader();
                         fileReader.onload = (function(e) {
                             var file = e.target;
-                            $("<span class=\"pip\">" +
-                                "<img class=\"imageThumb\" src=\"" + e.target.result + "\" title=\"" + file.name + "\"/>" +
-                                "<br/><span class=\"remove mt-1 bg-danger\">Remove</span>" +
-                                "</span>").insertAfter("#files");
+                            $("<div class=\"pip position-relative me-3\">" +
+                                "<img class=\"imageThumb \" src=\"" + e.target.result + "\" title=\"" + file.name + "\"/>" +
+                                "<br/><span class=\"remove position-absolute top-0 start-100 translate-middle badge bg-danger\">X</span>" +
+                                "</div>").insertBefore("#image");
                             $(".remove").click(function() {
+                                //files.splice(i,1);
                                 $(this).parent(".pip").remove();
                             });
 
@@ -89,10 +94,15 @@
                         fileReader.readAsDataURL(f);
                     }
                     console.log(files);
+                    console.log(typeof(files));
                 });
             } else {
                 alert("Your browser doesn't support to File API")
             }
+
+            // $("#add").click(function() {
+            //     $("").insertBefore("#image");
+            //     });
         });
     </script>
 
